@@ -121,8 +121,8 @@ void UpdateAtomInfoHost(Atoms& HostSystem, Atoms& HostTrial, size_t Molsize, int
       size_t index = Molsize * MolID + i;
       HostSystem.pos[index]    = HostTrial.pos[i];
       HostSystem.charge[index] = HostTrial.charge[i];
-      //Type should not change!//
       HostSystem.MolID[index]  = HostTrial.MolID[i];
+      HostSystem.Type[index] = HostTrial.Type[i];
       break;
     }
     case SINGLE_DELETION: case DELETION: //Copy the last molecule to the deleted one's place
@@ -443,6 +443,12 @@ PYBIND11_MODULE(gRASPA, m)
   m.def("GetAllAtoms", &GetAllAtoms, py::arg("Variable"), py::arg("systemId"), py::arg("component"));
   m.def("GetBox", &GetBox, py::arg("Variable"), py::arg("systemId"));
   m.def("GetPseudoAtomDefinitions", &GetPseudoAtomDefinitions, py::arg("Variable"));
+
+  m.def("GetOverlapFlag", [](Variables& Vars, size_t systemId, size_t componentId) {
+    return Vars.SystemComponents[systemId].flag[componentId];
+  }, py::arg("Vars"), py::arg("systemId"), py::arg("componentId"));
+
+
 
   m.def("GetTrialConfig", &GetTrialConfig, py::arg("Vars"), py::arg("systemId"), py::arg("component"), py::arg("WholeConfig"));
  
